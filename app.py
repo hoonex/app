@@ -8,9 +8,9 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 
 file_path = "rulebook.pdf" 
-CHUNK_SIZE = 1000
+CHUNK_SIZE = 2000
 CHUNK_OVERLAP = 150
-RETRIEVER_K = 50
+RETRIEVER_K = 75
 GEMINI_MODEL = "gemini-2.5-flash"
 EMBEDDING_MODEL = "models/text-embedding-004"
 
@@ -75,4 +75,5 @@ if rag_chain:
                 st.info(answer.content)
             except Exception as e:
                 st.error(f"답변 생성 중 오류가 발생했습니다. 오류: {e}")
+
 
