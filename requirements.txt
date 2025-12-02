@@ -1,0 +1,10 @@
+streamlit
+pypdf
+faiss-cpu
+google-genai
+# LangChain Core/Community/Google Components
+langchain
+langchain-core
+langchain-community
+langchain-google-genai
+langchain-text-splitters
