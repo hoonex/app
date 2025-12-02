@@ -49,6 +49,7 @@ def setup_rag_chain():
     질문: {question} 
     철저히 검색된 규정 문서에 근거해서만 답변하세요.
     특히 벌점 및 상점은 검색된 문서 내용의 '표, 리스트, 목록'을 참고하여 정확한 점수를 찾아 비교하여 제시하세요.
+    (Document 숫자, page 숫자)와 같은 필요없는 내용은 빼십시오.
     """)
     
     chain = (
@@ -79,6 +80,7 @@ if rag_chain:
                 st.info(answer.content)
             except Exception as e:
                 st.error(f"답변 생성 중 오류가 발생했습니다. 오류: {e}")
+
 
 
 
