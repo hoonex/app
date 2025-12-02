@@ -4,7 +4,7 @@ import streamlit as st
 
 # 기존 RAG 관련 라이브러리 임포트
 from langchain_community.document_loaders import PyPDFLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter 
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import ChatPromptTemplate
@@ -18,11 +18,10 @@ try:
     os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
 except KeyError:
     st.error("오류: Google API Key가 Streamlit Secrets에 'GOOGLE_API_KEY'라는 이름으로 설정되지 않았습니다.")
-    # API 키가 없으면 앱을 계속 진행할 수 없습니다.
     st.stop()
 
-# 파일 설정: 파일 이름은 'rulebook.pdf'로 가정 (사용자님께서 이미 변경하셨을 것으로 가정)
-file_path = "rulebook.pdf" 
+# 파일 설정: 파일 이름은 'rulebook.pdf'로 가정
+file_path = "rulebook.pdf"
 
 # -----------------------------------------------------------
 # 2. RAG 구성 함수 (단 한 번만 실행되도록 캐싱)
