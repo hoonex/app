@@ -8,9 +8,9 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 
 file_path = "rulebook.pdf" 
-CHUNK_SIZE = 2000
-CHUNK_OVERLAP = 150
-RETRIEVER_K = 75
+CHUNK_SIZE = 800
+CHUNK_OVERLAP = 100
+RETRIEVER_K = 50
 GEMINI_MODEL = "gemini-2.5-flash"
 EMBEDDING_MODEL = "models/text-embedding-004"
 
@@ -41,10 +41,10 @@ def setup_rag_chain():
     llm = ChatGoogleGenerativeAI(model=GEMINI_MODEL, temperature=0.1)
     
     prompt = ChatPromptTemplate.from_template("""
-        당신은 정동고등학교 생활규정 해석 AI입니다. 반드시 규정 조항(제몇조 몇항)을 근거로 답변하세요.
+        당신은 정동고등학교 생활규정 해석 AI입니다. 반드시 규정 조항(제몇조 몇항)과 벌점/상점 점수('숫자')를 포함하여 답변하세요.
         규정 문장: {context}
         질문: {question}
-        철저히 규정 문서에 근거해서만 답변하세요.
+        철저히 규정 문서에 근거해서만 답변하세요. 특히 벌점 및 상점은 검색된 문서 내용의 '표, 리스트, 목록'을 참고하여 정확한 점수를 찾아 답변하세요.
     """)
     
     chain = (
@@ -75,5 +75,6 @@ if rag_chain:
                 st.info(answer.content)
             except Exception as e:
                 st.error(f"답변 생성 중 오류가 발생했습니다. 오류: {e}")
+
 
 
