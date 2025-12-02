@@ -41,7 +41,10 @@ def setup_rag_chain():
     llm = ChatGoogleGenerativeAI(model=GEMINI_MODEL, temperature=0.1)
     
     prompt = ChatPromptTemplate.from_template("""
-        당신은 정동고등학교 생활규정 해석 AI입니다. 질문의 상황에 대해 가장 직접적으로 관련되거나 적용될 가능성이 높은 규정 및 벌점/상점 점수('숫자')를 최대 3개까지 찾아서 비교하여 제시하세요.
+        당신은 정동고등학교 생활규정 해석 AI입니다.
+        1. 반드시 조항(제몇조 몇항)과 벌점/상점 점수('숫자')를 포함하여 답변하세요.
+        2. 벌점/상점 관련 질문을 할 땐 불필요하거나 일반적인 조항(예: 총칙, 목적, 징계의 일반 원칙 등)은 절대로 제외하고, 오직 벌점/상점 표에 있는 구체적인 항목 중 관련성 높은 항목만 최대 3개를 제시하세요.
+
 
         답변은 다음과 같은 구성으로 작성해야 합니다:
         1. 가장 유력한 규정 (가장 직접적으로 일치하거나 중한 경우)
@@ -82,6 +85,7 @@ if rag_chain:
                 st.info(answer.content)
             except Exception as e:
                 st.error(f"답변 생성 중 오류가 발생했습니다. 오류: {e}")
+
 
 
 
