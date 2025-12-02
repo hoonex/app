@@ -7,26 +7,22 @@ from langchain_community.vectorstores import FAISS
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 
-# --- 설정 ---
 file_path = "rulebook.pdf" 
 CHUNK_SIZE = 1000
 CHUNK_OVERLAP = 150
-RETRIEVER_K = 15
+RETRIEVER_K = 50
 GEMINI_MODEL = "gemini-2.5-flash"
 EMBEDDING_MODEL = "models/text-embedding-004"
 
-# 1. API 키 설정 (Secrets에서 키를 가져와 환경 변수로 설정)
 try:
     os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
 except KeyError:
     st.error("오류: Google API Key가 Streamlit Secrets에 'GOOGLE_API_KEY'라는 이름으로 설정되지 않았습니다.")
-    st.stop() # 키가 없으면 안전하게 앱 실행 중단
+    st.stop()
 
-# 2. RAG 구성 함수 (단 한 번만 실행되도록 캐싱)
 @st.cache_resource
 def setup_rag_chain():
-    st.write("📖 규정집을 읽는 중...")
-    # 1. PDF 로드
+    st.write("규정집을 읽는 중...")
     try:
         loader = PyPDFLoader(file_path)
         documents = loader.load()
@@ -34,7 +30,7 @@ def setup_rag_chain():
         st.error(f"오류: PDF 파일을 불러올 수 없습니다. '{file_path}' 파일이 GitHub 루트에 있는지 확인하세요. 에러: {e}")
         return None 
 
-    st.write("🧠 AI가 규정집을 학습 중...")
+    st.write("AI가 규정집을 학습 중...")
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
     chunks = text_splitter.split_documents(documents)
     
@@ -56,26 +52,27 @@ def setup_rag_chain():
         | prompt
         | llm
     )
-    st.success("🎉 규정집 학습 완료!")
+    st.success("학습 완료!")
     return chain
 
 # 3. Streamlit 앱 실행
-st.title("🏫 정동고등학교 학생생활규정 AI 도우미")
-st.subheader("규정집을 학습한 AI에게 질문해 보세요.")
+st.title("🏫 정동고 학생생활규정 도우미")
+st.subheader("규정집을 학습한 도우미에게 질문해 보세요.")
 
 rag_chain = None
 with st.spinner("시스템 초기화 중입니다..."):
     rag_chain = setup_rag_chain()
 
 if rag_chain:
-    user_query = st.text_input("질문을 입력하세요 (예: 대회 입상 시 상점은 몇 점인가요?)")
+    user_query = st.text_input("질문을 입력하세요.")
 
     if user_query:
         with st.spinner("답변 생성 중..."):
             try:
                 answer = rag_chain.invoke(user_query)
                 st.markdown("---")
-                st.markdown(f"**🤖 답변:**")
+                st.markdown(f"답변:")
                 st.info(answer.content)
             except Exception as e:
                 st.error(f"답변 생성 중 오류가 발생했습니다. 오류: {e}")
+
