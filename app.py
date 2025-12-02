@@ -21,7 +21,7 @@ except KeyError:
     # API 키가 없으면 앱을 계속 진행할 수 없습니다.
     st.stop()
 
-# 파일 설정: 파일 이름은 'rulebook.pdf'로 가정 (1단계에서 변경 요청됨)
+# 파일 설정: 파일 이름은 'rulebook.pdf'로 가정 (사용자님께서 이미 변경하셨을 것으로 가정)
 file_path = "rulebook.pdf" 
 
 # -----------------------------------------------------------
@@ -35,7 +35,7 @@ def setup_rag_chain():
         loader = PyPDFLoader(file_path)
         documents = loader.load()
     except Exception as e:
-        # 파일 경로 오류 메시지를 명확하게 표시하고, None을 반환하여 로딩 실패를 알림
+        # 파일 경로 오류 메시지를 명확하게 표시
         st.error(f"오류: PDF 파일을 불러올 수 없습니다. GitHub 저장소의 루트에 '{file_path}' 파일이 있는지 확인하세요. 에러: {e}")
         return None
 
